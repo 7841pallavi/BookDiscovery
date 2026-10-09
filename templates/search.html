@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Search Results - BookDiscovery</title>
+
+<style>
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        background: #f5f7fb;
+        color: #222;
+    }
+
+    header {
+        background: #4f46e5;
+        color: white;
+        padding: 25px 8%;
+        text-align: center;
+    }
+
+    header h1 {
+        font-size: 32px;
+        margin-bottom: 8px;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 1100px;
+        margin: 40px auto;
+    }
+
+    .top-links {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        gap: 15px;
+    }
+
+    .back,
+    .favorites-link {
+        color: #4f46e5;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .favorites-link {
+        background: #fee2e2;
+        padding: 10px 15px;
+        border-radius: 7px;
+        color: #dc2626;
+    }
+
+    .search-box {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+
+        box-shadow:
+            0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .search-box form {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .search-box input,
+    .search-box select {
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 7px;
+        font-size: 15px;
+    }
+
+    .search-box input {
+        flex: 1;
+        min-width: 220px;
+    }
+
+    .search-box select {
+        min-width: 150px;
+        background: white;
+    }
+
+    .search-btn {
+        padding: 12px 20px;
+        background: #4f46e5;
+        color: white;
+        border: none;
+        border-radius: 7px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .search-btn:hover {
+        background: #3730a3;
+    }
+
+    .title {
+        margin-bottom: 25px;
+    }
+
+    .books {
+        display: grid;
+
+        grid-template-columns:
+            repeat(
+                auto-fit,
+                minmax(280px, 1fr)
+            );
+
+        gap: 25px;
+    }
+
+    .book {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+
+        box-shadow:
+            0 4px 15px rgba(0, 0, 0, 0.08);
+
+        transition: 0.2s;
+    }
+
+    .book:hover {
+        transform: translateY(-4px);
+    }
+
+    .book img {
+        width: 140px;
+        height: 200px;
+        object-fit: cover;
+        display: block;
+        margin: 0 auto 20px;
+        border-radius: 5px;
+    }
+
+    .no-cover {
+        width: 140px;
+        height: 200px;
+        margin: 0 auto 20px;
+
+        background: #e5e7eb;
+        border-radius: 5px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        text-align: center;
+        color: #777;
+    }
+
+    .book h3 {
+        color: #4f46e5;
+        margin-bottom: 12px;
+        font-size: 20px;
+    }
+
+    .book p {
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 8px;
+    }
+
+    .rating {
+        display: inline-block;
+        margin: 8px 0 12px;
+        padding: 7px 10px;
+
+        background: #fff7d6;
+        border-radius: 7px;
+
+        color: #8a6500;
+        font-weight: bold;
+    }
+
+    .rating-count {
+        font-size: 13px;
+        color: #777;
+        margin-left: 5px;
+    }
+
+    .description {
+        margin-top: 12px;
+        font-size: 14px;
+    }
+
+    .buttons {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 15px;
+    }
+
+    .details-btn,
+    .favorite-btn {
+        display: inline-block;
+
+        padding: 10px 14px;
+
+        border-radius: 7px;
+
+        text-decoration: none;
+
+        font-size: 14px;
+
+        font-weight: bold;
+    }
+
+    .details-btn {
+        background: #4f46e5;
+        color: white;
+    }
+
+    .details-btn:hover {
+        background: #3730a3;
+    }
+
+    .favorite-btn {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+    .favorite-btn:hover {
+        background: #fecaca;
+    }
+
+    .no-results {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        text-align: center;
+    }
+
+    footer {
+        text-align: center;
+        padding: 25px;
+        margin-top: 50px;
+        color: #777;
+    }
+
+    @media (max-width: 600px) {
+
+        .top-links {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+    }
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <h1>📚 BookDiscovery</h1>
+
+    <p>
+        Discover your next favorite book
+    </p>
+
+</header>
+
+
+<div class="container">
+
+
+    <div class="top-links">
+
+        <a
+            href="/"
+            class="back"
+        >
+            ← Back to Home
+        </a>
+
+
+        <a
+            href="/favorites"
+            class="favorites-link"
+        >
+            ❤️ My Favorites
+        </a>
+
+    </div>
+
+
+    <div class="search-box">
+
+        <form
+            action="/search"
+            method="GET"
+        >
+
+            <input
+                type="text"
+                name="query"
+                value="{{ query }}"
+                placeholder="Search book, author or genre..."
+                required
+            >
+
+
+            <select name="language">
+
+                <option value="all"
+                    {% if language == "all" %}
+                    selected
+                    {% endif %}
+                >
+                    All Languages
+                </option>
+
+                <option value="eng"
+                    {% if language == "eng" %}
+                    selected
+                    {% endif %}
+                >
+                    English
+                </option>
+
+                <option value="mar"
+                    {% if language == "mar" %}
+                    selected
+                    {% endif %}
+                >
+                    Marathi
+                </option>
+
+                <option value="hin"
+                    {% if language == "hin" %}
+                    selected
+                    {% endif %}
+                >
+                    Hindi
+                </option>
+
+                <option value="ben"
+                    {% if language == "ben" %}
+                    selected
+                    {% endif %}
+                >
+                    Bengali
+                </option>
+
+                <option value="tam"
+                    {% if language == "tam" %}
+                    selected
+                    {% endif %}
+                >
+                    Tamil
+                </option>
+
+                <option value="tel"
+                    {% if language == "tel" %}
+                    selected
+                    {% endif %}
+                >
+                    Telugu
+                </option>
+
+                <option value="kan"
+                    {% if language == "kan" %}
+                    selected
+                    {% endif %}
+                >
+                    Kannada
+                </option>
+
+                <option value="guj"
+                    {% if language == "guj" %}
+                    selected
+                    {% endif %}
+                >
+                    Gujarati
+                </option>
+
+            </select>
+
+
+            <select name="genre">
+
+                <option value="all"
+                    {% if genre == "all" %}
+                    selected
+                    {% endif %}
+                >
+                    All Genres
+                </option>
+
+                <option value="fiction"
+                    {% if genre == "fiction" %}
+                    selected
+                    {% endif %}
+                >
+                    Fiction
+                </option>
+
+                <option value="mystery"
+                    {% if genre == "mystery" %}
+                    selected
+                    {% endif %}
+                >
+                    Mystery
+                </option>
+
+                <option value="romance"
+                    {% if genre == "romance" %}
+                    selected
+                    {% endif %}
+                >
+                    Romance
+                </option>
+
+                <option value="science"
+                    {% if genre == "science" %}
+                    selected
+                    {% endif %}
+                >
+                    Science
+                </option>
+
+                <option value="history"
+                    {% if genre == "history" %}
+                    selected
+                    {% endif %}
+                >
+                    History
+                </option>
+
+                <option value="biography"
+                    {% if genre == "biography" %}
+                    selected
+                    {% endif %}
+                >
+                    Biography
+                </option>
+
+                <option value="fantasy"
+                    {% if genre == "fantasy" %}
+                    selected
+                    {% endif %}
+                >
+                    Fantasy
+                </option>
+
+                <option value="self-help"
+                    {% if genre == "self-help" %}
+                    selected
+                    {% endif %}
+                >
+                    Self Help
+                </option>
+
+            </select>
+
+
+            <button
+                type="submit"
+                class="search-btn"
+            >
+                Search
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <div class="title">
+
+        <h2>
+            Results for "{{ query }}"
+        </h2>
+
+    </div>
+
+
+    {% if books %}
+
+
+    <div class="books">
+
+
+        {% for book in books %}
+
+
+        <div class="book">
+
+
+            {% if book.image %}
+
+            <img
+                src="{{ book.image }}"
+                alt="{{ book.title }}"
+            >
+
+            {% else %}
+
+            <div class="no-cover">
+                No Cover Available
+            </div>
+
+            {% endif %}
+
+
+            <h3>
+                {{ book.title }}
+            </h3>
+
+
+            <p>
+                <b>✍️ Author:</b>
+                {{ book.author }}
+            </p>
+
+
+            <p>
+                <b>📅 Published:</b>
+                {{ book.year }}
+            </p>
+
+
+            <p>
+                <b>🌐 Language:</b>
+                {{ book.language }}
+            </p>
+
+
+            <p>
+                <b>🏷️ Genre:</b>
+                {{ book.genre }}
+            </p>
+
+
+            <div class="rating">
+
+                ⭐ {{ book.rating }}/5
+
+                {% if book.ratings_count %}
+
+                <span class="rating-count">
+                    ({{ book.ratings_count }} ratings)
+                </span>
+
+                {% endif %}
+
+            </div>
+
+
+            <p class="description">
+
+                {{ book.description[:400] }}
+
+                {% if book.description|length > 400 %}
+                ...
+                {% endif %}
+
+            </p>
+
+
+            <div class="buttons">
+
+
+                <a
+                    href="/book/{{ book.key }}"
+                    class="details-btn"
+                >
+                    View Details →
+                </a>
+
+
+                <a
+                    href="/favorite{{ book.key }}"
+                    class="favorite-btn"
+                >
+                    ❤️ Add to Favorites
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+
+        {% endfor %}
+
+
+    </div>
+
+
+    {% else %}
+
+
+    <div class="no-results">
+
+        <h2>
+            😕 No books found
+        </h2>
+
+        <br>
+
+        <p>
+            Try searching with another book name,
+            author, genre or language.
+        </p>
+
+    </div>
+
+
+    {% endif %}
+
+
+</div>
+
+
+<footer>
+
+    © 2026 BookDiscovery
+
+</footer>
+
+
+</body>
+
+</html>
